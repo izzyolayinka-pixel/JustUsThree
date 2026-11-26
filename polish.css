@@ -1,0 +1,157 @@
+/* ===== Just Us Three · polish layer (loads AFTER style.css and party.css) ===== */
+:root { --ease: cubic-bezier(.22,1,.36,1); --spring: cubic-bezier(.34,1.56,.64,1); }
+body { transition: background-color .3s, color .3s; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus, textarea:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 50%, transparent); }
+@media (hover: hover) { button:not(:disabled):hover { filter: brightness(1.08); } .iconbtn:hover { background: var(--input); } }
+@keyframes sheetIn { from { opacity: 0; transform: translateY(16px) scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px) scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes bubbleIn { from { opacity: 0; transform: translateY(12px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ---------- login / splash ---------- */
+.screen { background: var(--panel); border-radius: 26px; padding: 26px 22px; box-shadow: 0 14px 44px rgba(0,0,0,.35); animation: sheetIn .4s var(--spring); }
+.authlogo, .splogo, .emptylogo { box-shadow: 0 8px 26px rgba(0,0,0,.4); }
+.splogo { animation: sPulse 1.8s ease-in-out infinite; }
+@keyframes sPulse { 50% { transform: scale(1.06); } }
+#loginBtn, #signupBtn { padding: 14px; font-weight: 600; border-radius: 14px; }
+.emptylogo { animation: sPulse 4s ease-in-out infinite; }
+
+/* ---------- header, tabs, chat list ---------- */
+.topbar { position: relative; z-index: 3; box-shadow: 0 1px 0 var(--line), 0 6px 16px rgba(0,0,0,.14); }
+.tabs button { transition: color .2s, border-color .2s, background-color .2s; letter-spacing: .2px; }
+.chip { transition: background-color .2s, color .2s, transform .12s; }
+.search { transition: box-shadow .2s; }
+.user { margin: 1px 6px; padding: 10px; border-radius: 14px; transition: background-color .15s, transform .15s var(--ease); }
+.user:active { transform: scale(.985); }
+.user.active { background: color-mix(in srgb, var(--accent) 14%, var(--input)); }
+.user.muted { margin: 1px 6px; }
+.picklist .user { margin: 0; border-radius: 0; }
+.av { box-shadow: 0 1px 5px rgba(0,0,0,.28); }
+.av.on::after { animation: pop .3s var(--spring); }
+.badge { animation: pop .3s var(--spring); box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.menu { border-radius: 16px; backdrop-filter: blur(14px); animation: sheetIn .2s var(--spring); transform-origin: top right; }
+.menu button { transition: background-color .12s; }
+.pinbar { animation: rise .25s var(--ease); font-weight: 500; }
+
+/* ---------- messages ---------- */
+#messages { overflow-x: hidden; padding: 12px 14px 8px; }
+.msg { touch-action: pan-y; border-radius: 12px; box-shadow: 0 1px 1px rgba(0,0,0,.16), 0 2px 6px rgba(0,0,0,.08); transition: scale .2s var(--ease); letter-spacing: .1px; }
+.msg.pressing { scale: .965; }
+.msg.in, .msg.mine.in { animation: bubbleIn .3s var(--spring); }
+.msg.callmsg { touch-action: auto; }
+.msg.flash { animation: flashBg 1.5s ease-out; }
+@keyframes flashBg { 0%, 55% { filter: brightness(1.55); } 100% { filter: none; } }
+.msg img, .msg video { background: linear-gradient(100deg, var(--input) 30%, color-mix(in srgb, var(--input) 60%, #fff) 50%, var(--input) 70%) 0 0 / 200% 100%; animation: shimmer 1.4s linear infinite; }
+.msg.media img, .msg.media video { border-radius: 10px; }
+.msg img { transition: filter .2s; }
+.txt b { font-weight: 700; } .txt s { opacity: .8; }
+.txt code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(0,0,0,.25); padding: 1px 5px; border-radius: 5px; font-size: .92em; }
+.quote { background: rgba(0,0,0,.2); border-radius: 8px; transition: background-color .15s; }
+.quote:active { background: rgba(0,0,0,.32); }
+.pill { cursor: pointer; transition: transform .12s; }
+.pill:active { transform: scale(.9); }
+.pill.pop { animation: pillPop .4s var(--spring); }
+@keyframes pillPop { 0% { transform: scale(.2); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+.swipeico { position: absolute; left: -42px; top: 50%; width: 32px; height: 32px; margin-top: -16px; border-radius: 50%; background: var(--panel); color: var(--sub); display: flex; align-items: center; justify-content: center; opacity: 0; scale: .4; box-shadow: 0 1px 5px rgba(0,0,0,.35); pointer-events: none; }
+.swipeico svg { width: 18px; height: 18px; fill: currentColor; }
+.swipeico.go { background: var(--accent); color: #fff; }
+.heart { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; font-size: 52px; line-height: 56px; text-align: center; pointer-events: none; z-index: 6; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); animation: heartPop .8s var(--ease) forwards; }
+@keyframes heartPop { 0% { transform: scale(.2); opacity: 0; } 28% { transform: scale(1.3); opacity: 1; } 50% { transform: scale(.95); } 100% { transform: translateY(-46px) scale(1); opacity: 0; } }
+
+#dayFloat { position: absolute; left: 50%; transform: translate(-50%, -8px); opacity: 0; z-index: 6; background: color-mix(in srgb, var(--panel) 88%, transparent); backdrop-filter: blur(10px); color: var(--text); font-size: 12.5px; font-weight: 600; padding: 5px 14px; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.3); pointer-events: none; transition: opacity .25s, transform .25s var(--ease); }
+#dayFloat.show { opacity: 1; transform: translate(-50%, 0); }
+#toBottom { animation: pop .22s var(--spring); }
+#tbBadge { position: absolute; top: -7px; right: -3px; background: var(--accent); color: #fff; border-radius: 10px; font-size: 12px; font-weight: 700; min-width: 20px; padding: 1px 6px; line-height: 18px; }
+#tbBadge:empty { display: none; }
+
+/* ---------- composer ---------- */
+#composer { padding: 8px 10px; padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+.inputpill { transition: box-shadow .2s; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+.inputpill:focus-within { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent) 55%, transparent), 0 2px 10px rgba(0,0,0,.28); }
+.inputpill textarea, .inputpill textarea:focus { box-shadow: none; }
+#emojiBtn.on { color: var(--accent); }
+#actionBtn { box-shadow: 0 2px 8px rgba(0,0,0,.35); transition: transform .2s var(--spring), background-color .2s; }
+#actionBtn:active:not(:disabled) { transform: scale(.88); }
+#actionBtn svg { animation: pop .24s var(--spring); }
+.bar { animation: rise .22s var(--ease); }
+.attachgrid { border-radius: 22px; animation: sheetIn .22s var(--spring); }
+.attachgrid:not(.hidden) .am { animation: rise .35s var(--spring) both; animation-delay: calc(var(--i, 0) * 35ms); }
+.am:nth-child(2) { --i: 1; } .am:nth-child(3) { --i: 2; } .am:nth-child(4) { --i: 3; } .am:nth-child(5) { --i: 4; } .am:nth-child(6) { --i: 5; } .am:nth-child(7) { --i: 6; }
+.amc { box-shadow: 0 5px 12px rgba(0,0,0,.3); transition: transform .15s var(--spring); }
+.am:active .amc { transform: scale(.88); }
+.emojipanel, .mentionbox { position: absolute; left: 0; right: 0; bottom: 58px; z-index: 20; background: var(--panel); border-radius: 20px; box-shadow: 0 8px 28px rgba(0,0,0,.45); animation: sheetIn .2s var(--spring); transform-origin: bottom left; }
+.emojipanel { height: min(300px, 42dvh); overflow-y: auto; padding: 8px 10px 12px; overscroll-behavior: contain; }
+.eplab { font-size: 12.5px; color: var(--sub); padding: 8px 4px 4px; }
+.epgrid { display: grid; grid-template-columns: repeat(8, 1fr); }
+.ep { background: none; padding: 5px 0; font-size: 25px; line-height: 1.15; border-radius: 10px; transition: transform .12s var(--spring); }
+.ep:active { transform: scale(1.35); background: var(--input); }
+.mentionbox { display: flex; flex-direction: column; overflow: hidden; }
+.mentionbox button { display: flex; align-items: center; gap: 10px; background: none; color: var(--text); border-radius: 0; text-align: left; padding: 8px 14px; font-size: 15px; }
+.mentionbox button:active { background: var(--input); }
+.mentionbox .av { width: 30px; height: 30px; font-size: 13px; }
+
+/* ---------- long-press menu ---------- */
+#sheet { background: rgba(0,0,0,.42); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); animation: fade .18s; }
+#sheet.closing { opacity: 0; transition: opacity .15s; pointer-events: none; }
+#sheet.arming #sheetBox { pointer-events: none; }
+#sheetBox { gap: 10px; }
+#emojiRow { align-items: center; border-radius: 34px; padding: 6px 8px; animation: sheetIn .3s var(--spring); }
+.emo { width: 42px; height: 42px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 27px; flex-shrink: 0; transition: transform .15s var(--spring), background-color .15s; animation: rise .4s var(--spring) both; animation-delay: calc(var(--i, 0) * 32ms); }
+.emo:active { transform: scale(1.35); }
+.emo.on { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.emo.more { font-size: 19px; color: var(--sub); background: var(--input); }
+#emojiMore { display: none; grid-template-columns: repeat(6, 1fr); gap: 2px; background: var(--panel); border-radius: 22px; padding: 10px; max-height: 52dvh; overflow-y: auto; animation: sheetIn .25s var(--spring); }
+#sheet.picking #emojiMore { display: grid; }
+#sheet.picking #sheetPrev, #sheet.picking #menuList { display: none; }
+#sheetPrev { display: flex; max-height: 30dvh; overflow: hidden; animation: sheetIn .3s var(--spring); }
+#sheetPrev.mine { justify-content: flex-end; }
+#sheetPrev .msg { max-width: 100%; pointer-events: none; animation: none; margin-top: 0; }
+#menuList { border-radius: 20px; backdrop-filter: blur(14px); animation: sheetIn .3s var(--spring) .03s both; }
+#menuList button { animation: rise .3s var(--spring) both; animation-delay: calc(var(--i, 0) * 22ms + 60ms); transition: background-color .12s; }
+@media (hover: hover) { #menuList button:hover { background: var(--input); } }
+
+/* ---------- bottom action sheet (chat list long-press) ---------- */
+.psheet { position: fixed; inset: 0; z-index: 65; background: rgba(0,0,0,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: flex-end; justify-content: center; animation: fade .15s; }
+.psheet.out { opacity: 0; transition: opacity .18s; }
+.pbox { width: min(100%, 440px); background: var(--panel); border-radius: 24px 24px 0 0; padding: 8px 0 max(12px, env(safe-area-inset-bottom)); animation: slideUp .3s var(--ease); box-shadow: 0 -8px 30px rgba(0,0,0,.4); }
+.psheet .grab { width: 38px; height: 4px; border-radius: 2px; background: var(--sub); opacity: .4; margin: 4px auto 8px; }
+.psheet .t { padding: 4px 22px 10px; font-weight: 600; color: var(--sub); }
+.psheet button { display: flex; align-items: center; gap: 16px; width: 100%; background: none; color: var(--text); border-radius: 0; text-align: left; padding: 15px 22px; font-size: 16px; }
+.psheet button:active { background: var(--input); transform: none; }
+.psheet button i { font-style: normal; width: 24px; text-align: center; }
+.psheet button b { font-weight: 400; }
+.psheet button.red { color: #ff6b6b; }
+
+/* ---------- cards / overlays / toast ---------- */
+.overlay.dim { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.card { border-radius: 24px; animation: sheetIn .3s var(--spring); }
+.card h3 { font-size: 18px; }
+.card button { border-radius: 12px; }
+.sw, .themeitem, .chip { transition: transform .15s var(--spring), outline-color .15s; }
+.sw:active, .themeitem:active { transform: scale(.9); }
+@media (max-width: 700px) {
+  .overlay.dim { align-items: flex-end; }
+  .overlay.dim .card { width: 100%; border-radius: 26px 26px 0 0; max-height: 90dvh; padding-bottom: max(18px, env(safe-area-inset-bottom)); animation: slideUp .32s var(--ease); }
+}
+#toast { background: color-mix(in srgb, var(--panel) 92%, #000); color: var(--text); backdrop-filter: blur(12px); animation: sheetIn .25s var(--spring); box-shadow: 0 6px 22px rgba(0,0,0,.45); }
+#netBar { position: fixed; top: max(8px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); z-index: 95; background: #b26a00; color: #fff; font-size: 13px; padding: 6px 14px; border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.4); animation: sheetIn .25s var(--spring); }
+#chatPane.dropping::after { content: 'Drop to attach'; position: absolute; inset: 8px; z-index: 30; border: 2px dashed var(--accent); border-radius: 18px; background: rgba(0,0,0,.62); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 600; pointer-events: none; animation: fade .15s; }
+
+/* ---------- status viewer ---------- */
+#svBars { position: absolute; top: max(8px, env(safe-area-inset-top)); left: 10px; right: 10px; display: flex; gap: 4px; z-index: 3; pointer-events: none; }
+.svseg { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.3); overflow: hidden; }
+.svseg i { display: block; height: 100%; width: 0; background: #fff; }
+.svseg.done i { width: 100%; }
+.svseg.cur i { animation: svFill 6s linear forwards; }
+.svseg.cur.vid i { animation: none; }
+@keyframes svFill { to { width: 100%; } }
+#svTop { padding-top: max(22px, calc(env(safe-area-inset-top) + 14px)); }
+#svBody .big { box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+
+/* ---------- calls ---------- */
+#incAv .av { animation: ringPulse 1.6s infinite; }
+@keyframes ringPulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 65%, transparent); } 100% { box-shadow: 0 0 0 30px transparent; } }
+.callbtns .round { box-shadow: 0 6px 18px rgba(0,0,0,.45); transition: transform .15s var(--spring); }
+#callUI.audio { background: radial-gradient(circle at 50% 30%, #1d3a3a, #0b141a 70%); }
