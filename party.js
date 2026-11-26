@@ -253,14 +253,23 @@ async function blobUrl(url, type, label) {
 }
 async function ffLoad() {
   if (ffInst) return ffInst;
+  let lastErr = null;
+  for (const host of ['https://cdn.jsdelivr.net/npm', 'https://unpkg.com']) {
+    try { return await ffLoadFrom(host); }
+    catch (e) { lastErr = e; console.warn('[party] converter download failed from', host, e); ffStop(); }
+  }
+  throw new Error('Could not load the video converter (' + ((lastErr && lastErr.message) || 'network problem') + '). Check your internet and try again.');
+}
+async function ffLoadFrom(host) {
+  const ffBase = host + '/@ffmpeg/ffmpeg@' + FF_VER + '/dist/umd';
+  const coreBase = host + '/@ffmpeg/core@' + CORE_VER + '/dist/umd';
   busy('Downloading the video converter (one-time, about 30 MB)…', null);
-  await loadScript(FF_BASE + '/ffmpeg.js');
-  // find the worker chunk's file name inside ffmpeg.js (it is 814.ffmpeg.js in 0.12.x)
+  await loadScript(ffBase + '/ffmpeg.js');
   let chunk = '814.ffmpeg.js';
-  try { const m = (await (await fetch(FF_BASE + '/ffmpeg.js')).text()).match(/(\d+\.ffmpeg\.js)/); if (m) chunk = m[1]; } catch (e) {}
-  const coreURL = await blobUrl(CORE_BASE + '/ffmpeg-core.js', 'text/javascript');
-  const wasmURL = await blobUrl(CORE_BASE + '/ffmpeg-core.wasm', 'application/wasm', 'Downloading the video converter…');
-  const classWorkerURL = await blobUrl(FF_BASE + '/' + chunk, 'text/javascript');
+  try { const m = (await (await fetch(ffBase + '/ffmpeg.js')).text()).match(/(\d+\.ffmpeg\.js)/); if (m) chunk = m[1]; } catch (e) {}
+  const coreURL = await blobUrl(coreBase + '/ffmpeg-core.js', 'text/javascript');
+  const wasmURL = await blobUrl(coreBase + '/ffmpeg-core.wasm', 'application/wasm', 'Downloading the video converter…');
+  const classWorkerURL = await blobUrl(ffBase + '/' + chunk, 'text/javascript');
   const ff = new window.FFmpegWASM.FFmpeg();
   ff.on('log', e => { if (ffLogHook) ffLogHook(e.message); });
   busy('Starting the converter…', null);
