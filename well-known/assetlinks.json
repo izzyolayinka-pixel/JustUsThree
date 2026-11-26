@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.israel.justusthree",
+        "sha256_cert_fingerprints": ["2E:46:4B:9B:4A:A0:08:07:37:D3:BE:F6:8E:7C:6A:04:4A:CC:D1:BB:9A:2D:A2:1D:29:63:0C:A0:40:D8:7D:5F"]
+      }
+    }]

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Just Us Three</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#202c33">
+  <link rel="icon" href="icon-192.png">
+  <link rel="preload" as="image" href="just3.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="party.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="config.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="messages.js"></script>
+  <script defer src="groups.js"></script>
+  <script defer src="calls.js"></script>
+  <script defer src="party.js"></script>
+  <script defer src="extras.js"></script>
+</head>
+<body>
+
+  <div id="splash">
+    <img src="just3.png" alt="" class="splogo" onerror="this.style.display='none'">
+    <h1>Just Us Three</h1>
+    <p>Created by Israel Olayinka</p>
+    <div class="spinner"></div>
+  </div>
+
+  <div id="auth" class="screen hidden">
+    <img src="just3.png" alt="" class="authlogo" onerror="this.style.display='none'">
+    <h1>Just Us Three</h1>
+    <input id="username" placeholder="Username" autocapitalize="none" autocomplete="off">
+    <input id="password" type="password" placeholder="Password (min 6 characters)">
+    <input id="invite" placeholder="Invite code (only for creating an account)" autocapitalize="none">
+    <button id="loginBtn">Log in</button>
+    <button id="signupBtn" class="secondary">Create account</button>
+    <p id="authMsg"></p>
+    <p class="credit">Created by Israel Olayinka</p>
+  </div>
+
+  <div id="app" class="hidden">
+    <aside id="sidebar">
+      <div class="topbar">
+        <button id="meBtn" class="plain"><span id="meAv"></span><b id="meName"></b></button>
+        <span class="grow"></span>
+        <button id="starBtn" class="iconbtn" data-icon="star" title="Starred messages"></button>
+        <button id="newGroupBtn" class="iconbtn" data-icon="group" title="New group"></button>
+      </div>
+      <div class="tabs">
+        <button id="tabChats" class="active">Chats</button>
+        <button id="tabStatus">Status</button>
+        <button id="tabCalls">Calls</button>
+      </div>
+      <div id="chatsPane" class="pane">
+        <input id="searchInput" class="search" placeholder="Search chats and messages">
+        <div id="chips">
+          <button class="chip active" data-f="all">All</button>
+          <button class="chip" data-f="unread">Unread</button>
+          <button class="chip" data-f="groups">Groups</button>
+        </div>
+        <div id="archivedRow" class="archrow hidden"></div>
+        <div id="userList"></div>
+        <div id="msgResults"></div>
+      </div>
+      <div id="statusPane" class="pane hidden">
+        <div class="user" id="addStatusRow">
+          <div class="av big">＋</div>
+          <div class="mid"><div class="nm">Add status</div><div class="pv">Disappears after 24 hours</div></div>
+        </div>
+        <div id="statusList"></div>
+      </div>
+      <div id="callsPane" class="pane hidden">
+        <div id="callList"></div>
+      </div>
+      <p class="credit">Just Us Three · Created by Israel Olayinka</p>
+    </aside>
+
+    <main id="chat">
+      <div id="empty">
+        <img src="just3.png" alt="" class="emptylogo" onerror="this.style.display='none'">
+        <h2>Just Us Three</h2>
+        <p>Select a chat to start messaging</p>
+        <p class="credit">Created by Israel Olayinka</p>
+      </div>
+
+      <div id="chatPane" class="hidden">
+        <div class="topbar">
+          <button id="backBtn" class="iconbtn" data-icon="back"></button>
+          <button id="chatAv" class="plain avbtn"></button>
+          <div class="titles"><b id="chatTitle"></b><div id="chatSub"></div></div>
+          <button id="voiceBtn" class="iconbtn" data-icon="phone"></button>
+          <button id="videoBtn" class="iconbtn" data-icon="video"></button>
+          <button id="menuBtn" class="iconbtn" data-icon="more"></button>
+        </div>
+        <div id="chatMenu" class="menu hidden"></div>
+        <div id="chatSearch" class="hidden">
+          <input id="chatSearchInput" placeholder="Search in this chat">
+          <button id="chatSearchClose" class="small secondary">✕</button>
+        </div>
+        <div id="pinBar" class="pinbar hidden"></div>
+
+        <!-- Watch Party theater (pinned above the messages) -->
+        <div id="partyBox" class="hidden idle">
+          <div id="partyStage">
+            <video id="partyVid" playsinline></video>
+            <audio id="partyAud" preload="auto"></audio>
+            <div id="partySub"></div>
+
+            <div id="partyDrop">
+              <div class="big">🎬</div>
+              <b>Drop a movie here, or tap to choose one</b>
+              <small>MP4 · MKV · AVI · MOV · WEBM · FLV · WMV · TS · 3GP … it stays on your device, nothing is uploaded</small>
+            </div>
+
+            <div id="partyBusy" class="hidden">
+              <div class="spinner"></div>
+              <div id="partyBusyText"></div>
+              <div id="partyBarWrap" class="indet"><span id="partyBarFill"></span></div>
+              <button id="partyCancel" class="small secondary">Cancel</button>
+            </div>
+            <button id="partyTap" class="hidden">🔊 Tap for sound</button>
+
+            <div id="partyTop">
+              <div id="partyTitleBox"><span id="partyTitle">🎬 Watch Party</span><span id="partyWho"></span></div>
+              <button id="partySubBtn" class="small">💬 <span class="wid">Load Subtitles (.srt)</span><span class="nar">Subtitles</span></button>
+              <button id="partyChangeBtn" class="small">🔄 <span class="wid">Change Movie</span><span class="nar">Change</span></button>
+              <button id="partyFs" class="sq" title="Fullscreen / theater">⛶</button>
+              <button id="partyCloseBtn" class="sq" title="Close">✕</button>
+            </div>
+
+            <div id="partyCtl">
+              <button id="partyBack" class="ctl hostonly" title="Back 10 s">⏪</button>
+              <button id="partyPlay" class="ctl hostonly" title="Play / pause">▶</button>
+              <button id="partyFwd" class="ctl hostonly" title="Forward 10 s">⏩</button>
+              <input id="partySeek" type="range" min="0" max="1000" value="0">
+              <span id="partyTime">0:00</span>
+              <button id="partyCC" class="ctl" title="Subtitles on/off">CC</button>
+              <button id="partyMute" class="ctl viewonly" title="Mute">🔊</button>
+              <input id="partyVol" class="viewonly" type="range" min="0" max="1" step="0.05" value="1">
+            </div>
+          </div>
+        </div>
+
+        <div id="messages"></div>
+        <button id="toBottom" class="hidden" data-icon="down"></button>
+
+        <div id="notice" class="notice hidden"></div>
+        <div id="replyBar" class="bar hidden">
+          <div id="replyText"></div>
+          <button id="replyClose" class="small secondary">✕</button>
+        </div>
+        <div id="previewBar" class="bar hidden">
+          <img id="previewImg" class="hidden" alt="">
+          <div id="previewName"></div>
+          <button id="previewClose" class="small secondary">✕</button>
+        </div>
+
+        <div id="composer">
+          <div id="composerMain">
+            <div class="inputpill">
+              <button id="attachBtn" class="iconbtn" data-icon="attach"></button>
+              <textarea id="msgInput" rows="1" placeholder="Message"></textarea>
+            </div>
+            <button id="actionBtn" class="roundbtn" data-icon="mic"></button>
+            <div id="attachMenu" class="attachgrid hidden">
+              <button id="amGallery" class="am"><span class="amc" style="background:#7f66ff">🖼</span>Gallery</button>
+              <button id="amCamera" class="am"><span class="amc" style="background:#ff2e74">📷</span>Camera</button>
+              <button id="amVideo" class="am"><span class="amc" style="background:#e5533d">🎥</span>Video</button>
+              <button id="amDoc" class="am"><span class="amc" style="background:#5f66cd">📄</span>Document</button>
+              <button id="amLoc" class="am"><span class="amc" style="background:#1fa855">📍</span>Location</button>
+              <button id="amPoll" class="am"><span class="amc" style="background:#02a698">📊</span>Poll</button>
+              <button id="amParty" class="am"><span class="amc" style="background:#c026d3">🎬</span>Watch Party</button>
+            </div>
+          </div>
+          <div id="recBar" class="hidden">
+            <button id="recCancel" class="small secondary">✕</button>
+            <span id="recDot">●</span><span id="recTime">0:00</span>
+            <button id="recPause" class="small secondary">⏸</button>
+            <button id="recSend" class="roundbtn">➤</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- message menu (long press) -->
+  <div id="sheet" class="hidden">
+    <div id="sheetBox">
+      <div id="emojiRow"></div>
+      <div id="menuList">
+        <button id="replyBtn"><i>↩</i><b>Reply</b></button>
+        <button id="fwdBtn"><i>↪</i><b>Forward</b></button>
+        <button id="copyBtn"><i>⧉</i><b>Copy</b></button>
+        <button id="sStar"><i>★</i><b>Star</b></button>
+        <button id="sPin"><i>📌</i><b>Pin</b></button>
+        <button id="infoBtn"><i>ⓘ</i><b>Info</b></button>
+        <button id="editBtn"><i>✎</i><b>Edit</b></button>
+        <button id="delMeBtn"><i>🗑</i><b>Delete for me</b></button>
+        <button id="delAllBtn" class="red"><i>🗑</i><b>Delete for everyone</b></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- profile and settings -->
+  <div id="profileModal" class="overlay dim hidden">
+    <div class="card">
+      <div id="pAv" class="center"></div>
+      <label class="filebtn">Change profile photo
+        <input id="avatarFile" type="file" accept="image/*" hidden>
+      </label>
+      <b id="pName" class="center"></b>
+      <input id="aboutInput" maxlength="80" placeholder="About">
+      <label class="row"><span>Send read receipts (blue ticks)</span><input type="checkbox" id="rrToggle"></label>
+      <label class="row"><span>Show my online and last seen</span><input type="checkbox" id="lsToggle"></label>
+      <div class="lab">App theme</div>
+      <div id="themeGrid" class="themegrid"></div>
+      <button id="globalStyleBtn" class="secondary">🎨 Wallpaper and bubble colors for all chats</button>
+      <button id="saveProfile">Save</button>
+      <button id="closeProfile" class="secondary">Close</button>
+      <button id="logoutBtn" class="danger">Log out</button>
+    </div>
+  </div>
+
+  <!-- wallpaper and bubble colors -->
+  <div id="chatStyle" class="overlay dim hidden">
+    <div class="card">
+      <h3>Wallpaper and colors · <span id="csTitle"></span></h3>
+      <div class="lab">Wallpaper</div>
+      <div id="csWall" class="swatches"></div>
+      <label class="filebtn">Use a photo as wallpaper
+        <input id="csFile" type="file" accept="image/*" hidden>
+      </label>
+      <div class="lab">My bubble color</div>
+      <div id="csBubble" class="swatches"></div>
+      <button id="csReset" class="secondary">Reset</button>
+      <button id="csClose">Done</button>
+    </div>
+  </div>
+
+  <!-- media, links and docs -->
+  <div id="mediaView" class="overlay dim hidden">
+    <div class="card">
+      <h3>Media, links and docs</h3>
+      <div id="mdBody"></div>
+      <button id="mdClose" class="secondary">Close</button>
+    </div>
+  </div>
+
+  <!-- new group -->
+  <div id="newGroup" class="overlay dim hidden">
+    <div class="card">
+      <h3>New group</h3>
+      <input id="ngName" maxlength="40" placeholder="Group name">
+      <div class="lab">Pick friends</div>
+      <div id="ngList" class="picklist"></div>
+      <button id="ngCreate">Create group</button>
+      <button id="ngCancel" class="secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- group info -->
+  <div id="groupInfo" class="overlay dim hidden">
+    <div class="card">
+      <div id="giBody"></div>
+      <button id="giClose" class="secondary">Close</button>
+    </div>
+  </div>
+
+  <!-- add members -->
+  <div id="addMembers" class="overlay dim hidden">
+    <div class="card">
+      <h3>Add members</h3>
+      <div id="amList" class="picklist"></div>
+      <button id="amAdd">Add</button>
+      <button id="amCancel" class="secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- forward -->
+  <div id="forward" class="overlay dim hidden">
+    <div class="card">
+      <h3>Forward to…</h3>
+      <div id="fwdList" class="picklist"></div>
+      <button id="fwdSend">Send</button>
+      <button id="fwdCancel" class="secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- starred -->
+  <div id="starred" class="overlay dim hidden">
+    <div class="card">
+      <h3>Starred messages</h3>
+      <div id="starList" class="picklist"></div>
+      <button id="starClose" class="secondary">Close</button>
+    </div>
+  </div>
+
+  <!-- message info / contact info -->
+  <div id="infoCard" class="overlay dim hidden">
+    <div class="card">
+      <h3 id="infoTitle">Message info</h3>
+      <div id="infoBody"></div>
+      <button id="infoClose" class="secondary">Close</button>
+    </div>
+  </div>
+
+  <!-- new poll -->
+  <div id="pollOverlay" class="overlay dim hidden">
+    <div class="card">
+      <h3>New poll</h3>
+      <input id="pollQ" placeholder="Ask a question">
+      <div id="pollOpts" class="pollopts"></div>
+      <button id="pollAdd" class="secondary">＋ Add option</button>
+      <label class="row"><span>Allow multiple answers</span><input type="checkbox" id="pollMulti"></label>
+      <button id="pollSend">Send poll</button>
+      <button id="pollCancel" class="secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- new status -->
+  <div id="statusAdd" class="overlay dim hidden">
+    <div class="card">
+      <h3>New status (disappears in 24 hours)</h3>
+      <textarea id="statusText" rows="4" placeholder="What's on your mind?"></textarea>
+      <div id="statusColors" class="swatches"></div>
+      <label class="filebtn">📷 Add photo or video
+        <input id="statusFile" type="file" accept="image/*,video/*" hidden>
+      </label>
+      <span id="statusFileName"></span>
+      <button id="statusPost">Post</button>
+      <button id="statusCancel" class="secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- status viewer -->
+  <div id="statusView" class="overlay hidden">
+    <div id="svTop">
+      <span id="svName"></span>
+      <span id="svTime"></span>
+      <button id="svDel" class="small danger hidden">Delete</button>
+      <button id="svClose" class="small">✕</button>
+    </div>
+    <div id="svBody"></div>
+    <div id="svViews"></div>
+    <div id="svReplyRow" class="hidden">
+      <input id="svReplyInput" placeholder="Reply to status…">
+      <button id="svReplySend" class="roundbtn">➤</button>
+    </div>
+  </div>
+
+  <!-- photo viewer -->
+  <div id="lightbox" class="overlay hidden"><img id="lightImg" alt=""></div>
+
+  <!-- calls -->
+  <div id="incoming" class="overlay hidden">
+    <div class="incbox">
+      <div id="incAv" class="center"></div>
+      <h2 id="incName"></h2>
+      <p id="incText"></p>
+      <div class="callbtns">
+        <button id="incDecline" class="danger round">✕</button>
+        <button id="incAccept" class="round">📞</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="callUI" class="hidden">
+    <video id="remoteVid" autoplay playsinline></video>
+    <video id="localVid" autoplay playsinline muted></video>
+    <div class="callinfo">
+      <h2 id="callName"></h2>
+      <p id="callStatus"></p>
+    </div>
+    <div class="callbtns bottom">
+      <button id="callMute" class="secondary round">🎙</button>
+      <button id="callCam" class="secondary round">📷</button>
+      <button id="callEnd" class="danger round">📞</button>
+    </div>
+  </div>
+
+  <!-- watch party invite banner -->
+  <div id="partyInvite" class="hidden">
+    <span id="partyInviteText"></span>
+    <button id="partyInviteBtn" class="small">Join</button>
+    <button id="partyInviteNo" class="small secondary">✕</button>
+  </div>
+
+  <div id="toast" class="hidden"></div>
+
+  <input id="fileGallery" type="file" accept="image/*,video/*" hidden>
+  <input id="fileCamera" type="file" accept="image/*" capture="environment" hidden>
+  <input id="fileVideo" type="file" accept="video/*" capture="environment" hidden>
+  <input id="fileDoc" type="file" hidden>
+  <input id="giIcon" type="file" accept="image/*" hidden>
+  <input id="partyFile" type="file" accept="video/*,.mkv,.avi,.flv,.wmv,.mov,.m4v,.ts,.m2ts,.mts,.mpg,.mpeg,.webm,.3gp,.ogv,.divx,.vob,.asf,.rmvb" hidden>
+  <input id="partySubFile" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip,text/plain" hidden>
+
+</body>
+</html>
