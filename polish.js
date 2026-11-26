@@ -381,7 +381,6 @@ const syncNet = () => net.classList.toggle('hidden', navigator.onLine);
 window.addEventListener('online', () => { syncNet(); toast('Back online'); });
 window.addEventListener('offline', syncNet);
 syncNet();
-})();
 // ---------- stay put: no pull-to-refresh, reopen the same chat if the browser reloads ----------
 document.documentElement.style.overscrollBehaviorY = 'none';
 document.body.style.overscrollBehaviorY = 'none';
@@ -398,3 +397,23 @@ const restore = setInterval(() => {
   if (c && !current) openChat(c);
 }, 250);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && me) loadChats(); });
+
+// ---------- instant send: clear the box immediately, restore it only if sending fails ----------
+const _sendText = sendText;
+sendText = async function () {
+  if (!current || editing || pendingFile) return _sendText();
+  const text = ta.value.trim();
+  if (!text) return;
+  const chat = current;
+  ta.value = ''; autosize(); updateAction();
+  localStorage.removeItem('j3_draft_' + chat.id);
+  try {
+    const p = deliver({ content: text });
+    replyTo = null; $('replyBar').classList.add('hidden');
+    await p;
+  } catch (e) {
+    if (current === chat && !ta.value) { ta.value = text; autosize(); updateAction(); }
+    alert(friendly(e));
+  }
+};
+})();
