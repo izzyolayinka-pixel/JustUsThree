@@ -155,3 +155,12 @@ input:focus, textarea:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--acc
 @keyframes ringPulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 65%, transparent); } 100% { box-shadow: 0 0 0 30px transparent; } }
 .callbtns .round { box-shadow: 0 6px 18px rgba(0,0,0,.45); transition: transform .15s var(--spring); }
 #callUI.audio { background: radial-gradient(circle at 50% 30%, #1d3a3a, #0b141a 70%); }
+
+.msg, .msg * { outline: none !important; -webkit-tap-highlight-color: transparent; }
+.msg.pressing { scale: 1; }
+.msg img, .msg video { animation: none; }
+#sheet, #menuList, .menu, #toast, #dayFloat, .overlay.dim, .psheet { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+#sheet { background: rgba(0,0,0,.6); }
+.psheet { background: rgba(0,0,0,.55); }
+.msg { transition: none; }
+.msg.in, .msg.mine.in { animation-duration: .18s; }

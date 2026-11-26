@@ -12,12 +12,9 @@ const EM2 = '🍚 🌶️ 🍕 🍔 🍟 🍗 🍰 🍫 ☕ 🍻 🥂 🎂 ⚽ �
 const msgBox = $('messages'), S = $('sheet');
 
 // ---------- finger tracking (stops accidental taps right after a long-press) ----------
-let down = 0, lastUp = 0, openedAt = 0;
-document.addEventListener('touchstart', e => { down = e.touches.length; }, { capture: true, passive: true });
-const upH = e => { down = e.touches.length; lastUp = Date.now(); };
-document.addEventListener('touchend', upH, { capture: true, passive: true });
-document.addEventListener('touchcancel', upH, { capture: true, passive: true });
-const tooSoon = t0 => down > 0 || Date.now() - Math.max(t0, lastUp) < 380;
+let lastStart = 0, openedAt = 0;
+document.addEventListener('touchstart', () => { lastStart = Date.now(); }, { capture: true, passive: true });
+const tooSoon = t0 => Date.now() - t0 < 380 || (lastStart && lastStart < t0);
 
 // ---------- WhatsApp-style text formatting: *bold* _italic_ ~strike~ `code` ----------
 const FMT = /(https?:\/\/[^\s]+|@[a-z0-9_]{3,20}\b|(?<![\w*])\*[^*\n]+\*(?![\w*])|(?<![\w_])_[^_\n]+_(?![\w_])|(?<![\w~])~[^~\n]+~(?![\w~])|`[^`\n]+`)/gi;
