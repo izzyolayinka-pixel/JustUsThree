@@ -1,0 +1,43 @@
+/* ===== Just Us Three · pro layer (loads after polish.css) ===== */
+.msg { font-size: var(--fs, 15.5px); }
+.pane { overflow-x: hidden; }
+
+/* waveform voice notes */
+.audiobox { min-width: 235px; gap: 8px; }
+.vn-play { width: 38px; height: 38px; padding: 0; border-radius: 50%; font-size: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.vn-wave { display: flex; align-items: center; gap: 2px; height: 34px; flex: 1; min-width: 110px; cursor: pointer; }
+.vn-wave i { flex: 1; min-width: 2px; border-radius: 2px; background: currentColor; opacity: .3; transition: opacity .1s, background-color .1s; }
+.vn-wave i.on { opacity: 1; background: var(--accent); }
+.vn-time { font-size: 12px; color: var(--sub); min-width: 32px; }
+
+/* link preview cards */
+.lpcard { display: block; text-decoration: none; color: inherit; background: rgba(0,0,0,.2); border-radius: 10px; overflow: hidden; margin-bottom: 5px; max-width: 280px; }
+.lpcard img { width: 100%; max-height: 150px; min-height: 0; object-fit: cover; margin: 0; border-radius: 0; animation: none; background: none; }
+.lpt { padding: 7px 10px; display: flex; flex-direction: column; gap: 2px; }
+.lpt b { font-size: 14px; }
+.lpt span { font-size: 12.5px; color: var(--sub); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* pending / failed sends */
+.tick.pend svg { width: 12px; height: 12px; }
+.tick.fail { color: #ff6b6b !important; font-size: 12px; }
+.msg.failed { opacity: .85; }
+
+/* multi-select */
+#selBar { position: absolute; top: 0; left: 0; right: 0; z-index: 25; display: flex; align-items: center; gap: 4px; padding: 8px 10px; padding-top: max(8px, env(safe-area-inset-top)); min-height: 60px; background: var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.25); }
+#selN { font-size: 18px; margin-left: 8px; }
+#selBar .iconbtn { font-size: 20px; }
+.msg.picked { box-shadow: 0 0 0 2px var(--accent); }
+
+/* chat-list swipe actions */
+.user.swl { box-shadow: 100vw 0 0 0 #b9770e; }
+.user.swr { box-shadow: -100vw 0 0 0 var(--accent); }
+.badge.dot { min-width: 12px; width: 12px; height: 12px; padding: 0; border-radius: 50%; }
+
+/* photo viewer */
+#lightbox { touch-action: none; }
+#lightImg { will-change: transform; touch-action: none; }
+
+/* calls: camera is shown the normal way (not mirrored); tap your own preview to mirror it */
+#localVid, #remoteVid { transform: none; }
+#localVid.mir { transform: scaleX(-1); }
+#callFlip { font-size: 24px; }
