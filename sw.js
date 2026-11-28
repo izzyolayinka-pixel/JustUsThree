@@ -1,5 +1,5 @@
-const CACHE = 'j3-v8';
-const SHELL = ['./', 'index.html', 'style.css', 'party.css', 'config.js', 'app.js', 'messages.js', 'groups.js', 'calls.js', 'party.js', 'extras.js', 'polish.css', 'polish.js', 'pro.css', 'pro.js', 'fix.css', 'fix.js', 'native.js',
+const CACHE = 'j3-v10';
+const SHELL = ['./', 'index.html', 'style.css', 'party.css', 'config.js', 'app.js', 'messages.js', 'groups.js', 'calls.js', 'party.js', 'extras.js', 'polish.css', 'polish.js', 'pro.css', 'pro.js', 'fix.css', 'fix.js', 'native.js', 'plus.css', 'plus.js', 'plus2.css', 'plus2.js',
   'manifest.json', 'just3.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {

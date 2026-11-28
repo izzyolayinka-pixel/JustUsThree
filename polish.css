@@ -156,6 +156,7 @@ input:focus, textarea:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--acc
 .callbtns .round { box-shadow: 0 6px 18px rgba(0,0,0,.45); transition: transform .15s var(--spring); }
 #callUI.audio { background: radial-gradient(circle at 50% 30%, #1d3a3a, #0b141a 70%); }
 
+/* ---------- fixes: lighter on phones, no green box, no message animation ---------- */
 .msg, .msg * { outline: none !important; -webkit-tap-highlight-color: transparent; }
 .msg.pressing { scale: 1; }
 .msg img, .msg video { animation: none; }
@@ -163,8 +164,6 @@ input:focus, textarea:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--acc
 #sheet { background: rgba(0,0,0,.6); }
 .psheet { background: rgba(0,0,0,.55); }
 .msg { transition: none; }
-.msg.in, .msg.mine.in { animation-duration: .18s; }
-
 .inputpill:focus-within { box-shadow: 0 1px 4px rgba(0,0,0,.25) !important; }
 .inputpill textarea, .inputpill textarea:focus, .inputpill textarea:focus-visible { outline: none !important; box-shadow: none !important; }
 .msg.in, .msg.mine.in, .msg { animation: none !important; }

@@ -1,0 +1,5 @@
+/* ===== Just Us Three · fix layer (loads last) ===== */
+#messages { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; will-change: scroll-position; }
+.pane, #userList { overscroll-behavior: contain; }
+.msg { box-shadow: 0 1px 0 rgba(0,0,0,.18); }
+.msg.picked { box-shadow: 0 0 0 2px var(--accent); }

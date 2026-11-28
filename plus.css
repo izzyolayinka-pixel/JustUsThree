@@ -1,0 +1,18 @@
+/* ===== Just Us Three · plus layer (loads last) ===== */
+#chatSub.live { color: var(--accent); }
+html.hasWall #messages { background: var(--wall) !important; }
+.txt.clamp { max-height: 12.5em; overflow: hidden; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+.rm { display: block; background: none; color: var(--accent); padding: 2px 0 0; font-size: 13.5px; font-weight: 600; }
+.wallrow { display: flex; gap: 10px; flex-wrap: wrap; padding: 6px 0 10px; }
+.wsw { width: 34px; height: 34px; border-radius: 50%; padding: 0; border: 2px solid transparent; background: var(--input); }
+.wsw.on { border-color: var(--accent); }
+#lockScreen { position: fixed; inset: 0; z-index: 300; background: var(--bg, #111b21); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; }
+.lk-title { font-size: 20px; font-weight: 600; }
+.lk-dots { display: flex; gap: 14px; }
+.lk-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--sub); transition: background-color .1s; }
+.lk-dots i.on { background: var(--accent); border-color: var(--accent); }
+.lk-msg { color: #ff6b6b; min-height: 18px; font-size: 14px; }
+.lk-pad { display: grid; grid-template-columns: repeat(3, 72px); gap: 14px; }
+.lk-pad button { width: 72px; height: 72px; border-radius: 50%; font-size: 26px; background: var(--input); color: var(--text); padding: 0; }
+.lk-pad button:active { background: var(--accent); color: #fff; }
+.lk-link { background: none; color: var(--accent); }

@@ -1,0 +1,29 @@
+/* ===== Just Us Three · plus2 layer (loads last) ===== */
+
+/* --- nothing in the long-press menus can be selected or copied --- */
+#sheet, #sheet *, .psheet, .psheet *, #selBar, #selBar *, #userList, #userList *, .topbar, .topbar *:not(input) {
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+@media (pointer: coarse) { .msg, .msg * { -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none; } }
+#msgInput, input, textarea { -webkit-user-select: text; user-select: text; }
+
+/* --- long-press menu: cleaner look --- */
+#emojiRow { background: var(--panel); box-shadow: 0 8px 28px rgba(0,0,0,.4); }
+#sheetPrev .msg { box-shadow: 0 4px 16px rgba(0,0,0,.35); }
+#menuList { background: var(--panel); border-radius: 20px; padding: 6px; box-shadow: 0 14px 44px rgba(0,0,0,.5); overflow-y: auto; }
+#menuList, #menuList button { animation: none !important; }
+#menuList button { display: flex; align-items: center; gap: 14px; width: 100%; padding: 10px 12px; border-radius: 14px; background: none; color: var(--text); font-size: 16px; text-align: left; position: relative; }
+#menuList button i { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 16px; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+#menuList button b { font-weight: 500; letter-spacing: .1px; }
+#menuList button:active { background: var(--input); }
+#menuList #delMeBtn, #menuList #delAllBtn { color: #ff6b6b; }
+#menuList #delMeBtn i, #menuList #delAllBtn i { background: rgba(255,107,107,.15); color: #ff6b6b; }
+#menuList #delMeBtn::before { content: ''; position: absolute; top: -3px; left: 16px; right: 16px; height: 1px; background: var(--line); }
+.psheet button i { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--accent) 16%, transparent); }
+
+/* --- Watch Party: everyone can play, pause, skip and seek --- */
+#partyBox.viewer .hostonly { display: inline-flex; }
+#partyBox.viewer #partySeek { pointer-events: auto; }
+.pflash { position: absolute; top: 50%; z-index: 7; transform: translateY(-50%); padding: 10px 16px; border-radius: 26px; background: rgba(0,0,0,.6); color: #fff; font-size: 18px; font-weight: 600; pointer-events: none; animation: pflash .6s ease-out forwards; }
+.pflash.l { left: 12%; } .pflash.c { left: 50%; margin-left: -34px; } .pflash.r { right: 12%; }
+@keyframes pflash { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
